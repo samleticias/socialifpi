@@ -1,0 +1,255 @@
+:root {
+  --cor-principal: #4B0082;
+  --cor-secundaria: #2E003E;
+  --cor-fundo: #0A0A0A;
+  --cor-texto: #EAEAEA;
+  --cor-texto-secundario: #CBA6F7;
+  --cor-borda: #6A0DAD;
+  --cor-hover: #7D3FC4;
+}
+
+/* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--cor-fundo);
+  color: var(--cor-texto);
+  font-family: Arial, sans-serif;
+  overflow-x: hidden;
+}
+
+/* Layout geral */
+#layout {
+  display: flex;
+  min-height: 100vh;
+  transition: margin-left 0.3s ease;
+  position: relative;
+}
+
+/* Quando menu está aberto, empurra conteúdo */
+#layout.menu-aberto .main-content {
+  margin-left: 220px;
+}
+
+/* Header */
+header {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  background-color: var(--cor-secundaria);
+  padding: 15px 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  position: relative;
+  text-align: left; /* Sobrescreve qualquer text-align: center */
+}
+
+/* Botão de menu DENTRO do header */
+header #menu-toggle {
+  position: static;
+  margin: 0;
+  flex-shrink: 0;
+  background-color: var(--cor-principal);
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  z-index: 1;
+}
+
+/* Botão de menu fixo (fora do header) */
+#menu-toggle {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  background-color: var(--cor-principal);
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  font-size: 1.2rem;
+  z-index: 999;
+  cursor: pointer;
+}
+
+/* Container do título e subtítulo */
+.title {
+  display: flex;
+  align-items: baseline;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+/* Ajustes do título */
+.title h1 {
+  color: var(--cor-texto);
+  margin: 0;
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+/* Ajustes do subtítulo */
+.title p {
+  color: var(--cor-texto-secundario);
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 220px;
+  background-color: var(--cor-principal);
+  padding: 20px;
+  color: white;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1002;
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
+}
+
+.sidebar.ativa {
+  transform: translateX(0);
+}
+
+.sidebar ul {
+  list-style: none;
+}
+
+.sidebar ul li {
+  margin-bottom: 15px;
+}
+
+.sidebar ul li a {
+  color: white;
+  text-decoration: none;
+  display: block;
+  padding: 8px;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+}
+
+.sidebar ul li a:hover {
+  background-color: var(--cor-hover);
+}
+
+/* Conteúdo principal */
+.main-content {
+  flex: 1;
+  padding: 20px;
+  transition: margin-left 0.3s ease;
+  width: 100%;
+}
+
+/* Formulário */
+#formulario {
+  background-color: var(--cor-secundaria);
+  padding: 20px;
+  border-radius: 10px;
+  border: 1px solid var(--cor-borda);
+  margin-bottom: 20px;
+}
+
+.campos h2 {
+  color: var(--cor-texto-secundario);
+  margin-bottom: 10px;
+}
+
+.campos label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: var(--cor-texto-secundario);
+}
+
+.campos input,
+.campos textarea {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid var(--cor-borda);
+  border-radius: 5px;
+  background-color: var(--cor-principal);
+  color: var(--cor-texto);
+}
+
+.campos button {
+  background-color: var(--cor-principal);
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.campos button:hover {
+  background-color: var(--cor-hover);
+}
+
+/* Postagens */
+#postagens article {
+  background-color: transparent;
+  padding: 15px 0;
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--cor-borda);
+}
+
+#postagens article h2 {
+  color: var(--cor-texto);
+  margin-bottom: 5px;
+}
+
+#postagens article p,
+#postagens article .data {
+  color: var(--cor-texto-secundario);
+  font-size: 0.95rem;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+  #menu-toggle {
+    top: 10px;
+    left: 10px;
+    font-size: 1rem;
+    padding: 8px 12px;
+  }
+
+  .main-content {
+    padding-top: 60px;
+  }
+
+  .sidebar {
+    width: 200px;
+  }
+
+  #layout.menu-aberto .main-content {
+    margin-left: 0;
+  }
+
+  /* Ajuste para header em mobile */
+  header {
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 10px;
+  }
+
+  .title {
+    gap: 5px;
+  }
+
+  .title h1 {
+    font-size: 1.3rem;
+  }
+
+  .title p {
+    font-size: 0.8rem;
+  }
+}

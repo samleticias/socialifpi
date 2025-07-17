@@ -1,54 +1,80 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Social IFPI</title>
-    <link rel="stylesheet" href="estilos.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Social IFPI</title>
+  <link rel="stylesheet" href="src/style/style.css"/>
 </head>
 
 <body>
-    <div id="container">
-        <header>
-            <h1>Social IFPI</h1>
-            <p>Bem-vindo ao blog de tecnologia e inovação do IFPI</p>
-            <nav>
-                <ul>
-                    <li><a href="#">Home</a></li>
-                    <li><a href="#">Sobre</a></li>
-                    <li><a href="#">Contato</a></li>
-                    <li><a href="#">Blog</a></li>
-                    <li><a href="#">Portfólio</a></li>
-                </ul>
-            </nav>
-        </header>
-        <main>
-            <section id="formulario">
-                
-                <div class = "campos">
-                    <h2>Nova Postagem</h2>
-                    <label for="titulo">Título:</label>
-                    <input type="text" id="titulo" name="titulo" required>
-                    <br>
-                    <label for="conteudo">Conteúdo:</label>
-                    <textarea id="conteudo" name="conteudo" required></textarea>
-                    <br>
-                    <button id="botaoNovaPostagem">Incluir Postagem</button>
-                </div>
-                
-            </section>
+  <div id="layout">
+    <!-- Botão do menu -->
 
-            <section id="postagens">
-                <!-- As postagens serão inseridas aqui dinamicamente -->
-            </section>
-        </main>
-        <footer>
-            <p>&copy; 2024 Social IFPI. Todos os direitos reservados.</p>
-            <p>Feito com ♥ pela equipe do IFPI.</p>
-        </footer>
+    <!-- Sidebar oculta inicialmente -->
+    <aside class="sidebar hidden" id="sidebar">
+      <nav>
+        <ul>
+          <li><a href="#">🏠 Home</a></li>
+          <li><a href="src/page/about.html">📄 About</a></li>
+          <li><a href="#">✉️ Contato</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <!-- Conteúdo principal -->
+    <div class="main-content">
+     
+        <header>
+            <button id="menu-toggle">☰</button>
+            <div class="title">
+            <h1>Social IFPI</h1>
+            </div>
+        </header>
+
+      <main>
+        <section id="formulario">
+          <div class="campos">
+            <h2>Nova Postagem</h2>
+            <label for="titulo">Título:</label>
+            <input type="text" id="titulo" name="titulo" required />
+            <label for="conteudo">Conteúdo:</label>
+            <textarea id="conteudo" name="conteudo" required></textarea>
+            <button id="botaoNovaPostagem">Incluir Postagem</button>
+          </div>
+        </section>
+
+        <section id="postagens">
+          <!-- Postagens dinâmicas -->
+        </section>
+      </main>
     </div>
-    <script src="app.js"></script>
+  </div>
+
+  <script>
+    const toggle = document.getElementById('menu-toggle');
+    const sidebar = document.getElementById('sidebar');
+    const layout = document.getElementById('layout');
+
+    // Abre ou fecha o menu ao clicar no botão
+    toggle.addEventListener('click', (e) => {
+        e.stopPropagation(); // impede que o clique feche o menu
+        sidebar.classList.toggle('ativa');
+        layout.classList.toggle('menu-aberto');
+    });
+
+    // Fecha o menu ao clicar fora dele
+    document.addEventListener('click', (e) => {
+        const clicouForaSidebar = !sidebar.contains(e.target);
+        const clicouForaBotao = !toggle.contains(e.target);
+
+        if (clicouForaSidebar && clicouForaBotao) {
+        sidebar.classList.remove('ativa');
+        layout.classList.remove('menu-aberto');
+        }
+    });
+  </script>
 </body>
 
 </html>
