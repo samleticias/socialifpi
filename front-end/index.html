@@ -10,9 +10,6 @@
 
 <body>
   <div id="layout">
-    <!-- Botão do menu -->
-
-    <!-- Sidebar oculta inicialmente -->
     <aside class="sidebar hidden" id="sidebar">
       <nav>
         <ul>
@@ -23,9 +20,8 @@
       </nav>
     </aside>
 
-    <!-- Conteúdo principal -->
     <div class="main-content">
-     
+      
         <header>
             <button id="menu-toggle">☰</button>
             <div class="title">
@@ -33,48 +29,85 @@
             </div>
         </header>
 
-      <main>
-        <section id="formulario">
-          <div class="campos">
-            <h2>Nova Postagem</h2>
-            <label for="titulo">Título:</label>
-            <input type="text" id="titulo" name="titulo" required />
-            <label for="conteudo">Conteúdo:</label>
-            <textarea id="conteudo" name="conteudo" required></textarea>
-            <button id="botaoNovaPostagem">Incluir Postagem</button>
-          </div>
-        </section>
+        <main>
+            <section id="formulario">
+                <div class="campos">
+                    <h2>Nova Postagem</h2>
+                    <label for="titulo">Título:</label>
+                    <input type="text" id="titulo" name="titulo" required />
+                    
+                    <label for="categoria">Categoria:</label>
+                    <select id="categoria" name="categoria" required>
+                        <option value="esporte">Esporte</option>
+                        <option value="educacao">Educação</option>
+                        <option value="tecnologia">Tecnologia</option>
+                        <option value="lazer">Lazer</option>
+                    </select>
+                    
+                    <label for="conteudo">Conteúdo:</label>
+                    <textarea id="conteudo" name="conteudo" required></textarea>
+                    <button id="botaoNovaPostagem">Incluir Postagem</button>
+                </div>
+            </section>
+            
+            <section id="filtros">
+                <button id="btn-exibir-filtros">Filtrar Postagens</button>
+                <div class="opcoes-filtro" id="opcoes-filtro">
+                    <button class="btn-categoria" data-categoria="todos">Todos</button>
+                    <button class="btn-categoria" data-categoria="esporte">Esporte</button>
+                    <button class="btn-categoria" data-categoria="educacao">Educação</button>
+                    <button class="btn-categoria" data-categoria="tecnologia">Tecnologia</button>
+                    <button class="btn-categoria" data-categoria="lazer">Lazer</button>
+                </div>
+            </section>
 
-        <section id="postagens">
-          <!-- Postagens dinâmicas -->
-        </section>
-      </main>
+            <section id="postagens-grid">
+                </section>
+        </main>
     </div>
   </div>
+
+  <div id="post-detail-modal" class="modal-overlay">
+    <button class="close-modal-btn">&times;</button>
+    <div class="modal-content">
+        <div class="modal-image"></div>
+        <div class="modal-details">
+            <div class="modal-header">
+                <p><strong>socialifpi</strong></p>
+            </div>
+            <div class="modal-comments-list"></div>
+            <div class="modal-actions">
+                <p><strong id="modal-likes-count">0</strong> curtidas</p>
+            </div>
+            <div class="modal-comment-form">
+                <form id="comment-form">
+                    <input type="text" id="comment-input" placeholder="Adicione um comentário..." required>
+                    <button type="submit">Publicar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+  </div>
+
+  <script src="src/script/app.js"></script>
 
   <script>
     const toggle = document.getElementById('menu-toggle');
     const sidebar = document.getElementById('sidebar');
     const layout = document.getElementById('layout');
-
-    // Abre ou fecha o menu ao clicar no botão
     toggle.addEventListener('click', (e) => {
-        e.stopPropagation(); // impede que o clique feche o menu
+        e.stopPropagation();
         sidebar.classList.toggle('ativa');
         layout.classList.toggle('menu-aberto');
     });
-
-    // Fecha o menu ao clicar fora dele
     document.addEventListener('click', (e) => {
         const clicouForaSidebar = !sidebar.contains(e.target);
         const clicouForaBotao = !toggle.contains(e.target);
-
         if (clicouForaSidebar && clicouForaBotao) {
-        sidebar.classList.remove('ativa');
-        layout.classList.remove('menu-aberto');
+            sidebar.classList.remove('ativa');
+            layout.classList.remove('menu-aberto');
         }
     });
   </script>
 </body>
-
 </html>
