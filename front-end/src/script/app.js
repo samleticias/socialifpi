@@ -1,169 +1,64 @@
-"use strict";
 
-// Funções antigas da API (deixadas de lado por enquanto)
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-function getById(id) {
-    return document.getElementById(id);
-}
-const apiUrl = 'http://localhost:3000/socialifpi/posts'; 
-function curtirPostagem(id, curtidasElement) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const response = yield fetch(`${apiUrl}/${id}/curtir`, {
-            method: 'POST'
-        });
-        const result = yield response.json();
-        curtidasElement.textContent = `Curtidas: ${result.curtidas}`;
-    });
-}
-function incluirPostagem() {
-    return __awaiter(this, void 0, void 0, function* () {
-        const tituloInput = getById('titulo');
-        const conteudoInput = getById('conteudo');
-        if (tituloInput && conteudoInput) {
-            const novaPostagem = {
-                titulo: tituloInput.value,
-                conteudo: conteudoInput.value,
-                data: new Date().toISOString(),
-                curtidas: 0
-            };
-            const response = yield fetch(apiUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(novaPostagem)
-            });
-            const postagemIncluida = yield response.json();
-        }
-    });
-}
-
+import { renderizarPostsNaGrade } from './utils/render.js';
+import { fecharModal } from './utils/modal.js';
+import { criarPost, excluirPost, enviarComentario, enviarDenuncia } from './utils/actions.js';
 document.addEventListener('DOMContentLoaded', () => {
 
-    let postsSimulados = [
-        { id: 1, imageSrc: 'src/images/post1.png', likes: 15, comments: [{ user: 'aluno1', text: 'Que legal!' }], category: 'tecnologia' },
-        { id: 2, imageSrc: 'src/images/post2.jpg', likes: 32, comments: [{ user: 'professor_ely', text: 'Parabéns!' }], category: 'educacao' },
-        { id: 3, imageSrc: 'src/images/post3.jpg', likes: 50, comments: [{ user: 'aluno_ads', text: 'Muito bom!' }], category: 'esporte' },
-        { id: 4, imageSrc: 'src/images/post4.jpg', likes: 120, comments: [], category: 'lazer' },
-        { id: 5, imageSrc: 'src/images/post5.jpg', likes: 8, comments: [{ user: 'calouro', text: 'Cheguei!' }], category: 'tecnologia' },
-        { id: 6, imageSrc: 'src/images/post6.jpg', likes: 99, comments: [{ user: 'veterano', text: 'Bem-vindos!' }], category: 'esporte' },
-    ];
-
-    const containerDaGrade = document.getElementById('postagens-grid');
+    // Seletores de elementos principais
+    const formularioDePostagem = document.getElementById('form-nova-postagem');
     const modalDeDetalhes = document.getElementById('post-detail-modal');
-    const botaoFecharModal = document.querySelector('.close-modal-btn');
     const formularioComentario = document.getElementById('comment-form');
-    const botaoExibirFiltros = document.getElementById('btn-exibir-filtros');
+    const optionsMenu = document.querySelector('.options-menu');
+    const reportModal = document.getElementById('report-modal');
     const containerOpcoesFiltro = document.getElementById('opcoes-filtro');
-    const botoesDeCategoria = document.querySelectorAll('.btn-categoria');
-
-    // Filtra e exibe os posts na tela em formato de grade.
-     
-    function renderizarPostsNaGrade(categoriaFiltro = 'todos') {
-        if (!containerDaGrade) return;
-
-        const postsParaExibir = categoriaFiltro === 'todos'
-            ? postsSimulados
-            : postsSimulados.filter(post => post.category === categoriaFiltro);
-
-        containerDaGrade.innerHTML = '';
-
-        postsParaExibir.forEach(post => {
-            const cartaoPost = document.createElement('article');
-            cartaoPost.className = 'post-card';
-            cartaoPost.style.backgroundImage = `url('${post.imageSrc}')`; 
-            cartaoPost.addEventListener('click', () => abrirModalDoPost(post));
-
-            const camadaSobreposta = document.createElement('div');
-            camadaSobreposta.className = 'post-overlay';
-            camadaSobreposta.innerHTML = `
-                <div class="overlay-info"><span>❤️</span><span>${post.likes}</span></div>
-                <div class="overlay-info"><span>💬</span><span>${post.comments.length}</span></div>
-            `;
-            
-            cartaoPost.appendChild(camadaSobreposta);
-            containerDaGrade.appendChild(cartaoPost);
-        });
-    }
-
-    function abrirModalDoPost(post) {
-        if (!post || !modalDeDetalhes) return;
-
-        const imagemDoModal = modalDeDetalhes.querySelector('.modal-image');
-        const curtidasDoModal = modalDeDetalhes.querySelector('#modal-likes-count');
-        const categoriaDoModal = modalDeDetalhes.querySelector('#modal-categoria');
-        const listaDeComentarios = modalDeDetalhes.querySelector('.modal-comments-list');
-
-        imagemDoModal.style.backgroundImage = `url('${post.imageSrc}')`;
-        curtidasDoModal.textContent = post.likes;
-
-        if (categoriaDoModal) {
-            categoriaDoModal.textContent = post.category;
-            categoriaDoModal.className = `modal-categoria ${post.category.toLowerCase()}`;
-        }
-
-        listaDeComentarios.innerHTML = '';
-        post.comments.forEach(comentario => {
-            const elementoComentario = document.createElement('div');
-            elementoComentario.className = 'comment-item';
-            elementoComentario.innerHTML = `<div><strong>${comentario.user}</strong> <span>${comentario.text}</span></div>`;
-            listaDeComentarios.appendChild(elementoComentario);
-        });
-
-        modalDeDetalhes.classList.add('visivel');
-    }
 
 
-    // Fecha o modal de detalhes do post.
-    const fecharModal = () => {
-        if(modalDeDetalhes) modalDeDetalhes.classList.remove('visivel');
-    };
+    // Formulário de criar post submetido
+    formularioDePostagem?.addEventListener('submit', criarPost);
 
-    // Adiciona um novo comentário (simulado) na lista de comentários do modal.
-    function tratarEnvioDeComentario(evento) {
-        evento.preventDefault();
-        const campoComentario = document.getElementById('comment-input');
-        const listaDeComentarios = document.querySelector('.modal-comments-list');
-        
-        const textoNovoComentario = campoComentario.value;
-        if (textoNovoComentario.trim() === '') return;
-
-        const novoElementoComentario = document.createElement('div');
-        novoElementoComentario.className = 'comment-item';
-        novoElementoComentario.innerHTML = `<div><strong>você</strong> <span>${textoNovoComentario}</span></div>`;
-        listaDeComentarios.appendChild(novoElementoComentario);
-
-        campoComentario.value = '';
-    }
-
-    botaoExibirFiltros.addEventListener('click', () => {
-        containerOpcoesFiltro.classList.toggle('visivel');
-    });
-
-    botoesDeCategoria.forEach(botao => {
-        botao.addEventListener('click', () => {
-            botoesDeCategoria.forEach(btn => btn.classList.remove('active'));
-            botao.classList.add('active');
-            const categoriaSelecionada = botao.dataset.categoria;
-            renderizarPostsNaGrade(categoriaSelecionada);
-        });
-    });
-
-    if(botaoFecharModal) botaoFecharModal.addEventListener('click', fecharModal);
-    if(modalDeDetalhes) modalDeDetalhes.addEventListener('click', (evento) => {
+    // Lógica para uso do modal ao clicar em um post ou fechar o modal de detalhes
+    modalDeDetalhes?.querySelector('.close-modal-btn')?.addEventListener('click', fecharModal);
+    modalDeDetalhes?.addEventListener('click', (evento) => {
         if (evento.target === modalDeDetalhes) fecharModal();
     });
 
-    if(formularioComentario) formularioComentario.addEventListener('submit', tratarEnvioDeComentario);
+    // Formulário de comentário submetido
+    formularioComentario?.addEventListener('submit', enviarComentario);
+    
+    // Lógica do menu de três pontinhos em um post
+    optionsMenu?.parentElement?.querySelector('.options-btn')?.addEventListener('click', (evento) => {
+        evento.stopPropagation();
+        optionsMenu.classList.toggle('visivel');
+    });
 
-    document.querySelector('.btn-categoria[data-categoria="todos"]').classList.add('active');
+    // Eventos dos botões dentro do menu de três pontos
+    document.getElementById('btn-denunciar')?.addEventListener('click', () => reportModal?.classList.add('visivel'));
+    document.getElementById('btn-cancelar-denuncia')?.addEventListener('click', () => reportModal?.classList.remove('visivel'));
+    document.getElementById('report-form')?.addEventListener('submit', enviarDenuncia);
+    document.getElementById('btn-excluir')?.addEventListener('click', excluirPost);
+    
+    // Evento dos filtros de postagens para mostrar ou exibir categorias
+    document.getElementById('btn-exibir-filtros')?.addEventListener('click', () => {
+        containerOpcoesFiltro?.classList.toggle('visivel');
+    });
+    containerOpcoesFiltro?.addEventListener('click', (evento) => {
+        const target = evento.target;
+        if (target.matches('.btn-categoria')) {
+            const botaoClicado = target;
+            containerOpcoesFiltro.querySelectorAll('.btn-categoria').forEach(btn => btn.classList.remove('active'));
+            botaoClicado.classList.add('active'); // Marca a categoria como ativa
+            renderizarPostsNaGrade(botaoClicado.dataset.categoria); // Passa a renderização em grade com a categoria escolhida
+        }
+    });
+    
+    // Lógica para fechar o menu de três pontos
+    document.addEventListener('click', () => {
+        if (optionsMenu?.classList.contains('visivel')) {
+            optionsMenu.classList.remove('visivel');
+        }
+    });
+
+    // Renderização da tela inicial
+    document.querySelector('.btn-categoria[data-categoria="todos"]')?.classList.add('active');
     renderizarPostsNaGrade();
 });

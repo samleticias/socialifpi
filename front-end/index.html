@@ -31,11 +31,11 @@
 
         <main>
             <section id="formulario">
+              <form id="form-nova-postagem">
                 <div class="campos">
                     <h2>Nova Postagem</h2>
                     <label for="titulo">Título:</label>
                     <input type="text" id="titulo" name="titulo" required />
-                    
                     <label for="categoria">Categoria:</label>
                     <select id="categoria" name="categoria" required>
                         <option value="esporte">Esporte</option>
@@ -43,11 +43,11 @@
                         <option value="tecnologia">Tecnologia</option>
                         <option value="lazer">Lazer</option>
                     </select>
-                    
                     <label for="conteudo">Conteúdo:</label>
                     <textarea id="conteudo" name="conteudo" required></textarea>
-                    <button id="botaoNovaPostagem">Incluir Postagem</button>
+                    <button type="submit" id="botaoNovaPostagem">Incluir Postagem</button>
                 </div>
+              </form>
             </section>
             
             <section id="filtros">
@@ -73,13 +73,26 @@
         <div class="modal-image"></div>
         <div class="modal-details">
             <div class="modal-header">
-                <p><strong>socialifpi</strong></p>
-                <p id="modal-categoria" class="modal-categoria"></p>
+                <div class="header-info">
+                    <p><strong>socialifpi</strong></p>
+                    <h3 id="modal-titulo"></h3>
+                </div>
+                <p id="modal-categoria"></p>
             </div>
+
             <div class="modal-comments-list"></div>
+
             <div class="modal-actions">
                 <p><strong id="modal-likes-count">0</strong> curtidas</p>
+                <div class="post-options">
+                    <button class="options-btn">•••</button>
+                    <div class="options-menu">
+                        <a href="#" id="btn-denunciar">Denunciar</a>
+                        <a href="#" id="btn-excluir">Excluir Post</a>
+                    </div>
+                </div>
             </div>
+
             <div class="modal-comment-form">
                 <form id="comment-form">
                     <input type="text" id="comment-input" placeholder="Adicione um comentário..." required>
@@ -90,7 +103,38 @@
     </div>
   </div>
 
-  <script src="src/script/app.js"></script>
+  <div id="report-modal" class="modal-overlay">
+    <div class="report-modal-content">
+        <h3>Denunciar Postagem</h3>
+        <p>Por favor, selecione o motivo da denúncia.</p>
+        <form id="report-form">
+            <div class="report-reasons">
+                <label><input type="radio" name="reason" value="spam" checked> É spam</label>
+                <label><input type="radio" name="reason" value="ofensivo"> Conteúdo ofensivo</label>
+                <label><input type="radio" name="reason" value="falsa"> Informação falsa</label>
+                <label><input type="radio" name="reason" value="outro"> Outro</label>
+            </div>
+            <textarea id="report-comment" placeholder="Adicione um comentário (opcional)..."></textarea>
+            <div class="report-actions">
+                <button type="button" id="btn-cancelar-denuncia">Cancelar</button>
+                <button type="submit">Confirmar Denúncia</button>
+            </div>
+        </form>
+    </div>
+  </div>
+  
+  <div id="alerta-modal" class="modal-overlay">
+    <div class="alerta-modal-conteudo">
+        <h3 id="alerta-titulo"></h3>
+        <p id="alerta-mensagem"></p>
+        <div class="alerta-acoes">
+            <button id="alerta-btn-cancelar">Cancelar</button>
+            <button id="alerta-btn-confirmar">Confirmar</button>
+        </div>
+    </div>
+  </div>
+
+  <script type="module" src="src/script/app.js"></script>
 
   <script>
     const toggle = document.getElementById('menu-toggle');
