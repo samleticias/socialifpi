@@ -1,4 +1,4 @@
-
+import { tratarCurtida } from './actions.js';
 import { postsSimulados } from './dados.js';
 import { abrirModalDoPost } from './modal.js';
 
@@ -23,6 +23,7 @@ export function renderizarPostsNaGrade(categoriaFiltro = 'todos') {
         cartaoPost.style.backgroundImage = `url('${post.imageSrc}')`;
         cartaoPost.addEventListener('click', () => abrirModalDoPost(post));
         
+        // O overlay continua mostrando o número atualizado quando o mouse passar por cima
         const camadaSobreposta = document.createElement('div');
         camadaSobreposta.className = 'post-overlay';
         camadaSobreposta.innerHTML = `
@@ -35,8 +36,20 @@ export function renderizarPostsNaGrade(categoriaFiltro = 'todos') {
                 <p class="sobreposicao-categoria">${post.category}</p>
             </div>
         `;
+
+        const botaoCurtir = document.createElement('button');
+        botaoCurtir.className = 'botao-curtir';
+        
+        
+        botaoCurtir.innerHTML = `❤️ ${post.likes}`;
+
+        botaoCurtir.addEventListener('click', (evento) => {
+            evento.stopPropagation(); 
+            tratarCurtida(post.id);
+        });
         
         cartaoPost.appendChild(camadaSobreposta);
+        cartaoPost.appendChild(botaoCurtir);
         containerDaGrade.appendChild(cartaoPost);
     });
 }

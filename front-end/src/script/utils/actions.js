@@ -69,3 +69,19 @@ export function enviarDenuncia(evento) {
     fecharModal();
     exibirAlerta('Denúncia Enviada', 'Sua denúncia foi recebida e será analisada.', false);
 }
+
+
+export function tratarCurtida(postId) {
+    // Encontra o post específico na nossa lista de dados
+    const postAlvo = postsSimulados.find(p => p.id === postId);
+    if (!postAlvo) return;
+
+    // Apenas incrementa o número de curtidas
+    postAlvo.likes++;
+
+    // Pega o filtro que está ativo na tela para renderizar corretamente
+    const filtroAtivo = document.querySelector('.btn-categoria.active')?.dataset.categoria || 'todos';
+    
+    // Re-renderiza a grade de posts para mostrar a contagem atualizada
+    renderizarPostsNaGrade(filtroAtivo);
+}
