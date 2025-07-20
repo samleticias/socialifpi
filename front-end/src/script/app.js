@@ -49,12 +49,12 @@ function incluirPostagem() {
 document.addEventListener('DOMContentLoaded', () => {
 
     let postsSimulados = [
-        { id: 1, imageSrc: 'src/assets/images/post1.png', likes: 15, comments: [{ user: 'aluno1', text: 'Que legal!' }], category: 'tecnologia' },
-        { id: 2, imageSrc: 'src/assets/images/post2.jpg', likes: 32, comments: [{ user: 'professor_ely', text: 'Parabéns!' }], category: 'educacao' },
-        { id: 3, imageSrc: 'src/assets/images/post3.jpg', likes: 50, comments: [{ user: 'aluno_ads', text: 'Muito bom!' }], category: 'esporte' },
-        { id: 4, imageSrc: 'src/assets/images/post4.jpg', likes: 120, comments: [], category: 'lazer' },
-        { id: 5, imageSrc: 'src/assets/images/post5.jpg', likes: 8, comments: [{ user: 'calouro', text: 'Cheguei!' }], category: 'tecnologia' },
-        { id: 6, imageSrc: 'src/assets/images/post6.jpg', likes: 99, comments: [{ user: 'veterano', text: 'Bem-vindos!' }], category: 'esporte' },
+        { id: 1, imageSrc: 'src/images/post1.png', likes: 15, comments: [{ user: 'aluno1', text: 'Que legal!' }], category: 'tecnologia' },
+        { id: 2, imageSrc: 'src/images/post2.jpg', likes: 32, comments: [{ user: 'professor_ely', text: 'Parabéns!' }], category: 'educacao' },
+        { id: 3, imageSrc: 'src/images/post3.jpg', likes: 50, comments: [{ user: 'aluno_ads', text: 'Muito bom!' }], category: 'esporte' },
+        { id: 4, imageSrc: 'src/images/post4.jpg', likes: 120, comments: [], category: 'lazer' },
+        { id: 5, imageSrc: 'src/images/post5.jpg', likes: 8, comments: [{ user: 'calouro', text: 'Cheguei!' }], category: 'tecnologia' },
+        { id: 6, imageSrc: 'src/images/post6.jpg', likes: 99, comments: [{ user: 'veterano', text: 'Bem-vindos!' }], category: 'esporte' },
     ];
 
     const containerDaGrade = document.getElementById('postagens-grid');
@@ -94,17 +94,22 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Abre o modal com os detalhes de um post específico.
     function abrirModalDoPost(post) {
         if (!post || !modalDeDetalhes) return;
 
         const imagemDoModal = modalDeDetalhes.querySelector('.modal-image');
         const curtidasDoModal = modalDeDetalhes.querySelector('#modal-likes-count');
+        const categoriaDoModal = modalDeDetalhes.querySelector('#modal-categoria');
         const listaDeComentarios = modalDeDetalhes.querySelector('.modal-comments-list');
-        
+
         imagemDoModal.style.backgroundImage = `url('${post.imageSrc}')`;
         curtidasDoModal.textContent = post.likes;
-        
+
+        if (categoriaDoModal) {
+            categoriaDoModal.textContent = post.category;
+            categoriaDoModal.className = `modal-categoria ${post.category.toLowerCase()}`;
+        }
+
         listaDeComentarios.innerHTML = '';
         post.comments.forEach(comentario => {
             const elementoComentario = document.createElement('div');
@@ -115,6 +120,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         modalDeDetalhes.classList.add('visivel');
     }
+
 
     // Fecha o modal de detalhes do post.
     const fecharModal = () => {
