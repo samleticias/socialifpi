@@ -34,4 +34,15 @@ export class PostController {
             res.status(404).json({ message: error.message });
         }
     }
+
+    async delete(req: Request, res: Response) {
+        try {
+            const postId = Number(req.params.postId);
+            await postService.deletePost(postId);
+            res.status(200).json({ message: 'Post excluído com sucesso' });
+        } catch (error: any) {
+            res.status(404).json({ message: error.message });
+        }
+    }
+
 }

@@ -49,4 +49,13 @@ export class PostService {
         post.likes += 1;
         return await postRepository.save(post);
     }
+
+    async deletePost(postId: number): Promise<void> {
+        const post = await postRepository.findOneBy({ id: postId });
+        if (!post) {
+            throw new Error('Post não encontrado');
+        }
+        await postRepository.remove(post);
+    }
+
 }
