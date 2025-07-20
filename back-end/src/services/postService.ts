@@ -1,7 +1,9 @@
 import { postRepository } from '../repositories/postRepository';
 import { categoryRepository } from '../repositories/categoryRepository';
 import { Post } from '../models/post';
-import { CreatePostDTO } from '../models/dto/postDTOS';
+import { CreatePostDTO } from '../models/dto/PostDTO';
+import { PostWithCommentsDTO } from '../models/dto/PostDTO';
+import { CommentDTO } from '../models/dto/CommentDTO';
 import { Category } from '../models/category';
 
 export class PostService {
@@ -43,10 +45,53 @@ export class PostService {
         }));
     }
 
+    async getPostWithComments(postId: number): Promise<PostWithCommentsDTO> {
+
+        // busca o post pelo id, incluindo os comentários e a categoria
+        const post = await postRepository.findOne({
+            where: { id: postId },
+            relations: ['comments', 'category'],
+        });
+
+        if (!post) throw new Error('Post não encontrado');
+
+        // ordena os comentários por data (mais recentes primeiro)
+        const sortedComments = post.comments.sort(
+            (a, b) => b.date.getTime() - a.date.getTime()
+        );
+
+        const commentsDTO: CommentDTO[] = sortedComments.map(c => ({
+            id: c.id,
+            author: c.author,
+            content: c.content,
+            date: c.date,
+        }));
+
+        return {
+            id: post.id,
+            title: post.title,
+            content: post.content,
+            imagePath: post.imagePath,
+            date: post.date,
+            likes: post.likes,
+            category: post.category?.name ?? null,
+            comments: commentsDTO,
+        };
+    }
+
     async likePost(postId: number) {
         const post = await postRepository.findOneBy({ id: postId });
         if (!post) throw new Error('Post não encontrado');
         post.likes += 1;
         return await postRepository.save(post);
     }
+
+    async deletePost(postId: number): Promise<void> {
+        const post = await postRepository.findOneBy({ id: postId });
+        if (!post) {
+            throw new Error('Post não encontrado');
+        }
+        await postRepository.remove(post);
+    }
+
 }
