@@ -18,6 +18,9 @@ router.post('/posts/:postId/comment', (req, res) => commentController.addComment
 // ex: /socialifpi/posts/ordered?categoryName=Lazer
 router.get('/posts/ordered', (req, res) => postController.listOrdered(req, res));
 
+// rota para obter post por id com comentários ordenados por data (mais recentes primeiro)
+router.get('/posts/:postId', (req, res) => postController.getById(req, res));
+
 // rota para curtir um post por id
 router.post('/posts/:postId/like', (req, res) => postController.like(req, res));
 

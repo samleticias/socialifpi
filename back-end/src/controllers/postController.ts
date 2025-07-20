@@ -25,6 +25,16 @@ export class PostController {
         }
     }
 
+    async getById(req: Request, res: Response) {
+        try {
+            const postId = Number(req.params.postId);
+            const post = await postService.getPostWithComments(postId);
+            res.json(post);
+        } catch (error: any) {
+            res.status(404).json({ message: error.message });
+        }
+    }
+
     async like(req: Request, res: Response) {
         try {
             const postId = Number(req.params.postId);

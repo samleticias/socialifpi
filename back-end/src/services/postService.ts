@@ -43,6 +43,37 @@ export class PostService {
         }));
     }
 
+    async getPostWithComments(postId: number) {
+        // Busca o post pelo id, incluindo os comentários e a categoria
+        const post = await postRepository.findOne({
+            where: { id: postId },
+            relations: ['comments', 'category'],
+        });
+
+        if (!post) throw new Error('Post não encontrado');
+
+        // Ordena os comentários por data (mais recentes primeiro)
+        const sortedComments = post.comments.sort(
+            (a, b) => b.date.getTime() - a.date.getTime()
+        );
+
+        return {
+            id: post.id,
+            title: post.title,
+            content: post.content,
+            imagePath: post.imagePath,
+            date: post.date,
+            likes: post.likes,
+            category: post.category?.name,
+            comments: sortedComments.map(comment => ({
+                id: comment.id,
+                author: comment.author,
+                content: comment.content,
+                date: comment.date,
+            })),
+        };
+    }
+
     async likePost(postId: number) {
         const post = await postRepository.findOneBy({ id: postId });
         if (!post) throw new Error('Post não encontrado');
