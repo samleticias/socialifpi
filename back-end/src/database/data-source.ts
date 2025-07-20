@@ -7,12 +7,18 @@ import { Category } from '../models/category';
 
 export const AppDataSource = new DataSource({
     type: 'postgres',
-    host: 'localhost',
+    host: 'dpg-d1ujk67diees73aqt4hg-a.oregon-postgres.render.com',
     port: 5432,
-    username: 'postgres', // troque pelo seu usuário do postgres
-    password: 'jotave9474',   // troque pela sua senha do postgres
+    username: 'socialifpi_user', // troque pelo seu usuário do postgres
+    password: 'rjephsXK40wLN2DA2gBaGRvwIV0GQVvC',   // troque pela sua senha do postgres
     database: 'socialifpi',  // troque pelo nome do seu banco
     synchronize: true,       // true só em desenvolvimento!
     logging: false,
+    ssl: true,
+    extra: {
+        ssl: {
+            rejectUnauthorized: false, // necessário para o Render
+        },
+    },
     entities: [Post, Comment, Report, Category]
 });
