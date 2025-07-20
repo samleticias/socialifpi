@@ -1,35 +1,34 @@
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne } from 'typeorm';
+import { Comment } from './comment';
+import { Report } from './report';
+import { Category } from './category';
+
+@Entity()
 export class Post {
-    private id: number;
-    private title: string;
-    private content: string;
-    private date: Date;
-    private likes: number;
+    @PrimaryGeneratedColumn()
+    id!: number;
 
-    constructor(id: number, title: string, content: string, date: Date, likes: number) {
-        this.id = id;
-        this.title = title;
-        this.content = content;
-        this.date = date;
-        this.likes = likes;
-    }
+    @Column()
+    title!: string;
 
-    public getId(): number {
-        return this.id;
-    }
+    @Column()
+    content!: string;
 
-    public getTitle(): string {
-        return this.title;
-    }
+    @Column()
+    date!: Date;
 
-    public getContent(): string {
-        return this.content;
-    }
+    @Column({ default: 0 })
+    likes!: number;
 
-    public getDate(): Date {
-        return this.date;
-    }
+    @Column({ type: 'varchar', nullable: true })
+    imagePath?: string | null;
 
-    public getLikes(): number {
-        return this.likes;
-    }
+    @ManyToOne(() => Category, category => category.posts)
+    category!: Category;
+
+    @OneToMany(() => Comment, comment => comment.post, { cascade: true })
+    comments!: Comment[];
+
+    @OneToMany(() => Report, report => report.post, { cascade: true })
+    reports!: Report[];
 }

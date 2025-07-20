@@ -13,7 +13,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 function getById(id) {
     return document.getElementById(id);
 }
-const apiUrl = 'http://localhost:3000/socialifpi/postagem'; 
+const apiUrl = 'http://localhost:3000/socialifpi/posts'; 
 function curtirPostagem(id, curtidasElement) {
     return __awaiter(this, void 0, void 0, function* () {
         const response = yield fetch(`${apiUrl}/${id}/curtir`, {
