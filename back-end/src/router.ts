@@ -1,11 +1,13 @@
 import { Router } from 'express';
 import { PostController } from './controllers/postController';
 import { CommentController } from './controllers/commentController';
+import { ReportController } from './controllers/reportController';
 import { upload } from './middlewares/upload';
 
 const router = Router();
 const postController = new PostController();
 const commentController = new CommentController();
+const reportController = new ReportController();
 
 // rota para criar um novo post
 router.post('/posts', upload.single('image'), (req, res) => postController.create(req, res));
@@ -26,5 +28,8 @@ router.post('/posts/:postId/like', (req, res) => postController.like(req, res));
 
 // rota para deletar um post por id
 router.delete('/posts/:postId', (req, res) => postController.delete(req, res));
+
+// rota para denunciar um post
+router.post('/posts/:postId/report', (req, res) => reportController.report(req, res));
 
 export default router;
