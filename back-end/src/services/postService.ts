@@ -51,6 +51,11 @@ export class PostService {
         const post = await postRepository.findOne({
             where: { id: postId },
             relations: ['comments', 'category'],
+            order : {
+                comments : {
+                    date : 'DESC'
+                }
+            }
         });
 
         if (!post) throw new Error('Post não encontrado');

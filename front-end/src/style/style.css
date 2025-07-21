@@ -484,7 +484,37 @@ header #menu-toggle {
     color: var(--cor-texto);
     white-space: pre-wrap; /* Preserva quebras de linha do conteúdo */
 }
+.comment-item {
+    display: flex;
+    flex-direction: column; /* Organiza o header e o content verticalmente */
+    align-items: flex-start; /* Alinha tudo à esquerda */
+    gap: 4px; /* Pequeno espaço entre a linha do autor e o texto do comentário */
+    margin-bottom: 15px;
+}
 
+.comment-header {
+    display: flex;
+    align-items: baseline; 
+    gap: 10px; 
+}
+
+.comment-header strong {
+    color: var(--cor-texto-secundario);
+    font-size: 0.9rem;
+}
+
+/* Estilo para a data/hora */
+.comment-timestamp {
+    font-size: 0.75rem;
+    color: #888;
+}
+
+.comment-content {
+    margin: 0;
+    font-size: 0.9rem;
+    padding-left: 2px; 
+    color: var(--cor-texto);
+}
 /* Responsivo */
 @media (max-width: 768px) {
   .main-content { padding-top: 60px; }

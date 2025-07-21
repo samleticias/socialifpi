@@ -2,7 +2,7 @@
 
 import { postsSimulados } from './dados.js';
 import { renderizarPostsNaGrade } from './render.js';
-import { fecharModal, exibirAlerta } from './modal.js';
+import { fecharModal, exibirAlerta, abrirModalDoPost } from './modal.js';
 import { API_BASE_URL } from "../config.js";
 
 // Função para criar post a partir do formulário 
@@ -72,11 +72,31 @@ export async function enviarComentario(evento) {
             throw new Error('Erro ao enviar comentário');
         }
 
-        // Adiciona o comentário na lista sem recarregar a página
-        const novoElementoComentario = document.createElement('div');
-        novoElementoComentario.className = 'comment-item';
-        novoElementoComentario.innerHTML = `<div><strong>desconhecido</strong> <span>${textoNovoComentario}</span></div>`;
-        listaDeComentarios.appendChild(novoElementoComentario);
+        
+        // 2. Pega a resposta do servidor, que deve ser o comentário recém-criado
+        const comentarioSalvo = await resposta.json();
+
+        // 3. Cria o elemento HTML para o novo comentário USANDO os dados da resposta
+        const elementoComentario = document.createElement('div');
+        elementoComentario.className = 'comment-item';
+        
+        const dataDoComentario = new Date(comentarioSalvo.date);
+        const dataFormatada = dataDoComentario.toLocaleString('pt-BR', {
+            day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit'
+        });
+
+        elementoComentario.innerHTML = `
+            <div class="comment-header">
+                <strong>${comentarioSalvo.author}</strong>
+                <span class="comment-timestamp">${dataFormatada}</span>
+            </div>
+            <p class="comment-content">${comentarioSalvo.content}</p>
+        `;
+        
+        // 4. Usa .prepend() para adicionar o novo comentário NO TOPO da lista
+        listaDeComentarios.prepend(elementoComentario);
+
+        // 5. Limpa o campo de texto
         campoComentario.value = '';
 
         // atualiza o feed

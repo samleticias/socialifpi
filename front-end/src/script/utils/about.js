@@ -1,8 +1,8 @@
 const devs = {
     front1: {
       nome: "Enzo Melo",
-      imagem: "caminho/enzo.jpg",
-      descricao: "Descrição do enzo"
+      imagem: "../images/devs/enzo.jpeg",
+      descricao: "Sou desenvolvedor com habilidades em desenvolvimento web, principalmente no front-end. Além disso, também atuo na área de sistemas embarcados, com experiência em integrar hardware com soluções do dia a dia."
     },
     front2: {
       nome: "Kaio Gabriel",

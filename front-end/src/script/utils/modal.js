@@ -5,10 +5,10 @@ export async function abrirModalDoPost(post) {
     const modalDeDetalhes = document.getElementById('post-detail-modal');
     if (!post || !modalDeDetalhes) return;
 
-    // Busca os detalhes do post no backend
     let postDetalhado;
     try {
         const resposta = await fetch(`${API_BASE_URL}/socialifpi/posts/${post.id}`);
+        if (!resposta.ok) throw new Error('Falha ao buscar post');
         postDetalhado = await resposta.json();
     } catch (e) {
         console.error('Erro ao buscar detalhes do post:', e);
@@ -26,19 +26,39 @@ export async function abrirModalDoPost(post) {
     imagemDoModal.style.backgroundImage = `url('${postDetalhado.imagePath ? API_BASE_URL + '/' + postDetalhado.imagePath : ''}')`;
     curtidasDoModal.textContent = postDetalhado.likes;
     tituloDoModal.textContent = postDetalhado.title;
-    categoriaDoModal.textContent = postDetalhado.category || '';
+    categoriaDoModal.textContent = postDetalhado.category?.name || ''; // Usando a propriedade 'name' do objeto de categoria
     conteudoDoModal.textContent = postDetalhado.content;
     
     listaDeComentarios.innerHTML = '';
+
+    // O array `postDetalhado.comments` já vem ordenado do back-end
     (postDetalhado.comments || []).forEach(comentario => {
         const elementoComentario = document.createElement('div');
         elementoComentario.className = 'comment-item';
-        elementoComentario.innerHTML = `<div><strong>${comentario.author}</strong> <span>${comentario.content}</span></div>`;
+                
+        const dataDoComentario = new Date(comentario.date);
+
+        const dataFormatada = dataDoComentario.toLocaleString('pt-BR', {
+            day: '2-digit',
+            month: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+
+        elementoComentario.innerHTML = `
+            <div class="comment-header">
+                <strong>${comentario.author}</strong>
+                <span class="comment-timestamp">${dataFormatada}</span>
+            </div>
+            <p class="comment-content">${comentario.content}</p>
+        `;
+        
         listaDeComentarios.appendChild(elementoComentario);
     });
 
     modalDeDetalhes.classList.add('visivel');
 }
+
 
 // Função para fechar o modal de detalhes
 export function fecharModal() {
