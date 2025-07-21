@@ -11,8 +11,8 @@ const devs = {
     },
     back1: {
       nome: "João Victor",
-      imagem: "caminho/joao.jpg",
-      descricao: "Descrição do jota"
+      imagem: "../images/devs/jota.jpg",
+      descricao: "Desenvolvedor com fortes habilidades em desenvolvimento web, tanto no front-end quanto no back-end. Atualmente, também atua na área de sistemas embarcados, unindo experiência em aplicações web modernas com soluções inovadoras em hardware."
     },
     back2: {
       nome: "Sammya Letícia",
