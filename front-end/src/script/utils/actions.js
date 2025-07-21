@@ -3,6 +3,7 @@
 import { postsSimulados } from './dados.js';
 import { renderizarPostsNaGrade } from './render.js';
 import { fecharModal, exibirAlerta } from './modal.js';
+import { API_BASE_URL } from "../config.js";
 
 // Função para criar post a partir do formulário 
 export async function criarPost(evento) {
@@ -16,92 +17,161 @@ export async function criarPost(evento) {
     if (!tituloInput.value.trim() || !conteudoInput.value.trim()) {
         return exibirAlerta('Erro', 'Por favor, preencha o título e o conteúdo.', false);
     }
-    
-    let imagemSrc = `https://via.placeholder.com/600/?text=${tituloInput.value.replace(/\s/g, '+')}`;
 
-    // Processa a imagem anexada, se houver
+    // Monta o FormData para enviar para o backend
+    const formData = new FormData();
+    formData.append('title', tituloInput.value);
+    formData.append('content', conteudoInput.value);
+    formData.append('categoryName', categoriaInput.value);
     if (imagemInput.files.length > 0) {
-        const arquivo = imagemInput.files[0];
-        try {
-            imagemSrc = await new Promise((resolve, reject) => {
-                const leitor = new FileReader();
-                leitor.onload = () => resolve(leitor.result);
-                leitor.onerror = reject;
-                leitor.readAsDataURL(arquivo);
-            });
-        } catch (erro) {
-            return exibirAlerta('Erro', 'Não foi possível carregar a imagem selecionada.', false);
-        }
+        formData.append('image', imagemInput.files[0]);
     }
 
-    const novoPost = {
-        id: Date.now(),
-        title: tituloInput.value,
-        content: conteudoInput.value, // Salva o conteúdo
-        category: categoriaInput.value,
-        imageSrc: imagemSrc,
-        likes: 0,
-        comments: []
-    };
-    
-    postsSimulados.unshift(novoPost);
-    renderizarPostsNaGrade();
-    formulario.reset();
+    try {
+        const resposta = await fetch(`${API_BASE_URL}/socialifpi/posts`, {
+            method: 'POST',
+            body: formData
+        });
+
+        if (!resposta.ok) {
+            throw new Error('Erro ao criar post');
+        }
+
+        exibirAlerta('Sucesso', 'Post criado com sucesso!', false);
+        fecharModal();
+        formulario.reset();
+        renderizarPostsNaGrade();
+    } catch (erro) {
+        exibirAlerta('Erro', 'Não foi possível criar o post.', false);
+    } finally {
+    }
 }
 
 // Função para enviar um comentário
-export function enviarComentario(evento) {
+export async function enviarComentario(evento) {
     evento.preventDefault();
     const formulario = evento.target;
     const campoComentario = formulario.querySelector('#comment-input');
     const listaDeComentarios = document.querySelector('.modal-comments-list');
+    const modalDeDetalhes = document.getElementById('post-detail-modal');
+    const postId = modalDeDetalhes?.dataset.currentPostId;
 
     const textoNovoComentario = campoComentario.value;
-    if (textoNovoComentario.trim() === '' || !listaDeComentarios) return;
+    if (textoNovoComentario.trim() === '' || !listaDeComentarios || !postId) return;
 
-    const novoElementoComentario = document.createElement('div');
-    novoElementoComentario.className = 'comment-item';
-    novoElementoComentario.innerHTML = `<div><strong>você</strong> <span>${textoNovoComentario}</span></div>`;
-    listaDeComentarios.appendChild(novoElementoComentario);
-    campoComentario.value = '';
+    try {
+        const resposta = await fetch(`${API_BASE_URL}/socialifpi/posts/${postId}/comment`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                content: textoNovoComentario
+            })
+        });
+
+        if (!resposta.ok) {
+            throw new Error('Erro ao enviar comentário');
+        }
+
+        // Adiciona o comentário na lista sem recarregar a página
+        const novoElementoComentario = document.createElement('div');
+        novoElementoComentario.className = 'comment-item';
+        novoElementoComentario.innerHTML = `<div><strong>desconhecido</strong> <span>${textoNovoComentario}</span></div>`;
+        listaDeComentarios.appendChild(novoElementoComentario);
+        campoComentario.value = '';
+
+        // atualiza o feed
+        renderizarPostsNaGrade();
+
+    } catch (erro) {
+        exibirAlerta('Erro', 'Não foi possível enviar o comentário.', false);
+    }
 }
 
 // Função para lidar com exclusão de um post
-export function excluirPost() {
+export async function excluirPost() {
     const modalDeDetalhes = document.getElementById('post-detail-modal');
-    const postIdParaExcluir = parseInt(modalDeDetalhes.dataset.currentPostId || '0');
-    
-    exibirAlerta('Confirmar Exclusão', 'Tem certeza que deseja excluir esta postagem? Esta ação não pode ser desfeita.', true, () => {
-        const index = postsSimulados.findIndex(post => post.id === postIdParaExcluir);
-        if (index > -1) {
-            postsSimulados.splice(index, 1);
+    const postIdParaExcluir = parseInt(modalDeDetalhes?.dataset.currentPostId || '0');
+
+    if (!postIdParaExcluir) {
+        return exibirAlerta('Erro', 'Post não encontrado.', false);
+    }
+
+    exibirAlerta('Confirmar Exclusão', 'Tem certeza que deseja excluir esta postagem? Esta ação não pode ser desfeita.', true, async () => {
+        try {
+            const resposta = await fetch(`${API_BASE_URL}/socialifpi/posts/${postIdParaExcluir}`, {
+                method: 'DELETE'
+            });
+
+            if (!resposta.ok) {
+                throw new Error('Erro ao excluir o post');
+            }
+
+            fecharModal();
+            renderizarPostsNaGrade();
+            exibirAlerta('Sucesso', 'A postagem foi excluída.', false);
+        } catch (erro) {
+            exibirAlerta('Erro', 'Não foi possível excluir o post.', false);
         }
-        fecharModal();
-        renderizarPostsNaGrade();
-        exibirAlerta('Sucesso', 'A postagem foi excluída.', false);
     });
 }
 
 // Função para lidar com o envio de uma denúncia.
-export function enviarDenuncia(evento) {
+export async function enviarDenuncia(evento) {
     evento.preventDefault();
-    document.getElementById('report-modal')?.classList.remove('visivel');
-    fecharModal();
-    exibirAlerta('Denúncia Enviada', 'Sua denúncia foi recebida e será analisada.', false);
+    const modalDeDetalhes = document.getElementById('post-detail-modal');
+    const postId = modalDeDetalhes?.dataset.currentPostId;
+    const motivo = document.querySelector('input[name="reason"]:checked')?.value || '';
+    const comentario = document.getElementById('report-comment')?.value || '';
+
+    if (!postId || !motivo.trim()) {
+        return exibirAlerta('Erro', 'Por favor, informe o motivo da denúncia.', false);
+    }
+
+    try {
+        const resposta = await fetch(`${API_BASE_URL}/socialifpi/posts/${postId}/report`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                reason: motivo,
+                comment: comentario
+            })
+        });
+
+        const respostaJson = await resposta.json();
+
+        if (!resposta.ok) {
+            throw new Error(respostaJson.message || 'Erro ao enviar denúncia');
+        }
+
+        document.getElementById('report-modal')?.classList.remove('visivel');
+
+        if (respostaJson.message === "Post excluído devido a múltiplas denúncias") {
+            exibirAlerta('Post Excluído', 'O post foi removido automaticamente após múltiplas denúncias.', false);
+            fecharModal();
+            renderizarPostsNaGrade();
+        } else {
+            exibirAlerta('Denúncia Enviada', 'Sua denúncia foi recebida e será analisada.', false);
+        }
+    } catch (erro) {
+        exibirAlerta('Erro', 'Não foi possível enviar a denúncia.', false);
+    }
 }
 
 
-export function tratarCurtida(postId) {
-    // Encontra o post específico na nossa lista de dados
-    const postAlvo = postsSimulados.find(p => p.id === postId);
-    if (!postAlvo) return;
+export async function tratarCurtida(postId) {
+    try {
+        const resposta = await fetch(`${API_BASE_URL}/socialifpi/posts/${postId}/like`, {
+            method: 'POST'
+        });
 
-    // Apenas incrementa o número de curtidas
-    postAlvo.likes++;
+        if (!resposta.ok) {
+            throw new Error('Erro ao curtir o post');
+        }
 
-    // Pega o filtro que está ativo na tela para renderizar corretamente
-    const filtroAtivo = document.querySelector('.btn-categoria.active')?.dataset.categoria || 'todos';
-    
-    // Re-renderiza a grade de posts para mostrar a contagem atualizada
-    renderizarPostsNaGrade(filtroAtivo);
+        // Atualiza a grade de posts com o filtro atual
+        const filtroAtivo = document.querySelector('.btn-categoria.active')?.dataset.categoria || 'todos';
+        renderizarPostsNaGrade(filtroAtivo);
+    } catch (erro) {
+        exibirAlerta('Erro', 'Não foi possível curtir o post.', false);
+    }
 }

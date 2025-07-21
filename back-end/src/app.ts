@@ -19,15 +19,15 @@ AppDataSource.initialize()
 // Configurações do Express para entender JSON no corpo das requisições
 app.use(express.json());
 
+// Configuração básica do CORS para permitir requisições de outras origens
+app.use(cors());
+
 import path from 'path';
 
 app.use('/uploads', express.static(path.resolve(__dirname, '../uploads')));
 
 // Configurando as rotas do servidor
 app.use('/socialifpi', router);
-
-// Configuração básica do CORS para permitir requisições de outras origens
-app.use(cors());
 
 // Inicializar o servidor na porta 3000
 const PORT = 3000;
