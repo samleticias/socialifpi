@@ -5,21 +5,41 @@ import { renderizarPostsNaGrade } from './render.js';
 import { fecharModal, exibirAlerta } from './modal.js';
 
 // Função para criar post a partir do formulário 
-export function criarPost(evento) {
+export async function criarPost(evento) {
     evento.preventDefault();
     const formulario = evento.target;
     const tituloInput = formulario.querySelector('#titulo');
     const categoriaInput = formulario.querySelector('#categoria');
+    const conteudoInput = formulario.querySelector('#conteudo');
+    const imagemInput = formulario.querySelector('#imagem');
 
-    if (!tituloInput.value.trim()) {
-        return exibirAlerta('Erro', 'Por favor, preencha o título da postagem.', false);
+    if (!tituloInput.value.trim() || !conteudoInput.value.trim()) {
+        return exibirAlerta('Erro', 'Por favor, preencha o título e o conteúdo.', false);
+    }
+    
+    let imagemSrc = `https://via.placeholder.com/600/?text=${tituloInput.value.replace(/\s/g, '+')}`;
+
+    // Processa a imagem anexada, se houver
+    if (imagemInput.files.length > 0) {
+        const arquivo = imagemInput.files[0];
+        try {
+            imagemSrc = await new Promise((resolve, reject) => {
+                const leitor = new FileReader();
+                leitor.onload = () => resolve(leitor.result);
+                leitor.onerror = reject;
+                leitor.readAsDataURL(arquivo);
+            });
+        } catch (erro) {
+            return exibirAlerta('Erro', 'Não foi possível carregar a imagem selecionada.', false);
+        }
     }
 
     const novoPost = {
         id: Date.now(),
         title: tituloInput.value,
+        content: conteudoInput.value, // Salva o conteúdo
         category: categoriaInput.value,
-        imageSrc: `https://via.placeholder.com/600/?text=${tituloInput.value.replace(/\s/g, '+')}`,
+        imageSrc: imagemSrc,
         likes: 0,
         comments: []
     };

@@ -10,11 +10,13 @@ export function abrirModalDoPost(post) {
     const listaDeComentarios = modalDeDetalhes.querySelector('.modal-comments-list');
     const tituloDoModal = modalDeDetalhes.querySelector('#modal-titulo');
     const categoriaDoModal = modalDeDetalhes.querySelector('#modal-categoria');
+    const conteudoDoModal = modalDeDetalhes.querySelector('#modal-conteudo');
     
     imagemDoModal.style.backgroundImage = `url('${post.imageSrc}')`;
     curtidasDoModal.textContent = post.likes;
     tituloDoModal.textContent = post.title;
     categoriaDoModal.textContent = post.category;
+    conteudoDoModal.textContent = post.content; // <-- Linha ajustada
     
     listaDeComentarios.innerHTML = '';
     post.comments.forEach(comentario => {

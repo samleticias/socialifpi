@@ -458,6 +458,33 @@ header #menu-toggle {
     color: #ff4d4d; 
 }
 
+.campos input[type="file"] {
+    padding: 3px;
+    background-color: transparent;
+    border: none;
+    margin-bottom: 15px;
+}
+.campos input[type="file"]::file-selector-button {
+    background-color: var(--cor-principal);
+    color: var(--cor-texto);
+    border: 1px solid var(--cor-borda);
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+.campos input[type="file"]::file-selector-button:hover {
+    background-color: var(--cor-hover);
+}
+
+.modal-post-content {
+    padding: 0 15px 15px 15px;
+    border-bottom: 1px solid var(--cor-borda);
+    font-size: 0.9rem;
+    color: var(--cor-texto);
+    white-space: pre-wrap; /* Preserva quebras de linha do conteúdo */
+}
+
 /* Responsivo */
 @media (max-width: 768px) {
   .main-content { padding-top: 60px; }
