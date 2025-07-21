@@ -16,7 +16,7 @@ const devs = {
     },
     back2: {
       nome: "Sammya Letícia",
-      imagem: "../images/devs/sammya.png",
+      imagem: "../images/devs/sammya.jpg",
       descricao: "Sou desenvolvedora back-end focada em Java, atualmente explorando Django e React para ampliar minhas habilidades full-stack. Valorizo o trabalho em equipe e acredito que unir conhecimento com autenticidade é o caminho para entregar soluções cada vez melhores."
     }
   };
