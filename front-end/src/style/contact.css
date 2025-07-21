@@ -76,3 +76,32 @@ h1 {
   text-shadow: 0 0 15px var(--cor-hover); 
   transition: text-shadow 0.3s ease;
 }
+
+.btn-voltar {
+    color: var(--cor-texto);
+    background-color: var(--cor-secundaria);
+    padding: 8px 16px;
+    border-radius: 20px;
+    text-decoration: none;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid var(--cor-borda);
+    cursor: pointer;
+    font-family: Arial, sans-serif;
+    font-size: 1rem;
+    transition: background-color 0.3s;
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1000;
+}
+
+.btn-voltar:hover {
+    background-color: var(--cor-hover);
+}
+
+.placeholder {
+    width: 105px; 
+}

@@ -228,6 +228,10 @@ body {
     font-family: Arial, sans-serif;
     font-size: 1rem;
     transition: background-color 0.3s;
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1000;
 }
 
 .btn-voltar:hover {
