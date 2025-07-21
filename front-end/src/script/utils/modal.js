@@ -26,7 +26,7 @@ export async function abrirModalDoPost(post) {
     imagemDoModal.style.backgroundImage = `url('${postDetalhado.imagePath ? API_BASE_URL + '/' + postDetalhado.imagePath : ''}')`;
     curtidasDoModal.textContent = postDetalhado.likes;
     tituloDoModal.textContent = postDetalhado.title;
-    categoriaDoModal.textContent = postDetalhado.category?.name || '';
+    categoriaDoModal.textContent = postDetalhado.category || '';
     conteudoDoModal.textContent = postDetalhado.content;
     
     listaDeComentarios.innerHTML = '';
