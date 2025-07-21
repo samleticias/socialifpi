@@ -29,3 +29,12 @@ Sistema de blog desenvolvido como trabalho final da disciplina Programação par
 - Multer – Upload de arquivos
 - TypeScript – Tipagem estática
 - HTML/CSS/JS – Front-end 
+
+## Equipe de Desenvolvimento
+
+Este projeto foi desenvolvido por:
+
+- **[Enzo Melo](https://github.com/EnzoMello)**  
+- **[Kaio Gabriel](https://github.com/KaioGabriel-the)**  
+- **[João Victor](https://github.com/victordev018)**  
+- **[Sâmmya Leticia](https://github.com/samleticias)**
