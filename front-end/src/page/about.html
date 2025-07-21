@@ -5,17 +5,69 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>About</title>
   <link rel="stylesheet" href="../style/about.css"/>
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+  />
 </head>
 <body>
   <header>
-    <h1 class="title-about">
-      About
-    </h1>
+    <h1 class="title-about">About</h1>
   </header>
   <main>
-    <section class="text" >
-      <p>This is some example text about your website or project. You can replace this with your actual content that describes what your project is about, its purpose, and any other relevant information you want to share with your visitors.</p>
+    <section class="bloco-devs">
+      <p style="text-align: center; margin-bottom: 2rem;">
+        Somos alunos do 3º período do curso de Análise e Desenvolvimento de Sistemas do IFPI - Instituto Federal do Piauí. <br>
+        Este blog foi desenvolvido como projeto final da disciplina de Programação para Internet I, com o objetivo de aplicar na prática os conhecimentos adquiridos ao longo do semestre em tecnologias web, tanto no front-end quanto no back-end.
+      </p>
+
+      <h2 class="subtitulo">Equipe Front-end</h2>
+      <p class="tecnologias">Tecnologias utilizadas: HTML, CSS, JavaScript</p>
+      <div class="icones-tecnologias">
+        <i class="fab fa-html5" title="HTML" style="color: #e34c26;"></i>
+        <i class="fab fa-css3-alt" title="CSS" style="color: #264de4;"></i>
+        <i class="fab fa-js-square" title="JavaScript" style="color: #f0db4f;"></i>
+      </div>
+      <div class="linha-cards">
+        <div class="card" onclick="mostrarDetalhes('front1')">
+          <img src="../img/enzo.jpg" alt="Enzo Melo">
+          <p>Enzo Melo</p>
+        </div>
+        <div class="card" onclick="mostrarDetalhes('front2')">
+          <img src="../img/kaio.jpg" alt="Kaio Gabriel">
+          <p>Kaio Gabriel</p>
+        </div>
+      </div>
+
+      <h2 class="subtitulo">Equipe Back-end</h2>
+      <p class="tecnologias">Tecnologias utilizadas: Node.js, Express.js, PostgreSQL, JavaScript</p>
+      <div class="icones-tecnologias">
+        <i class="fab fa-node-js" title="Node.js" style="color: #68a063;"></i>
+        <img src="../images/icons/postgresql.png" alt="PostgreSQL" title="PostgreSQL" style="width: 32px; height: 32px;" />
+        <img src="../images/icons/typescript.png" alt="TypeScript" title="TypeScript" style="width: 32px; height: 32px;" />
+        <img src="../images/icons/express.png" alt="Express.js" title="Express.js" style="width: 32px; height: 32px;" />
+      </div>
+      <div class="linha-cards">
+        <div class="card" onclick="mostrarDetalhes('back1')">
+          <img src="../img/joao.jpg" alt="João Victor">
+          <p>João Victor</p>
+        </div>
+        <div class="card" onclick="mostrarDetalhes('back2')">
+          <img src="../images/devs/sammya.png" alt="Sammya Letícia">
+          <p>Sammya Letícia</p>
+        </div>
+      </div>
     </section>
+
+    <div class="modal" id="modalDetalhes">
+      <div class="modal-content" id="modalConteudo">
+        <span class="modal-close" onclick="fecharModal()">×</span>
+        <img id="modalImagem" src="" alt="Foto do dev" />
+        <h3 id="modalNome">Nome</h3>
+        <p id="modalDescricao">Descrição</p>
+      </div>
+    </div>
   </main>
+  <script src="../script/utils/about.js"></script>
 </body>
 </html>
