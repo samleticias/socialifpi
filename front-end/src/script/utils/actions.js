@@ -73,10 +73,8 @@ export async function enviarComentario(evento) {
         }
 
         
-        // 2. Pega a resposta do servidor, que deve ser o comentário recém-criado
         const comentarioSalvo = await resposta.json();
 
-        // 3. Cria o elemento HTML para o novo comentário USANDO os dados da resposta
         const elementoComentario = document.createElement('div');
         elementoComentario.className = 'comment-item';
         
@@ -93,13 +91,10 @@ export async function enviarComentario(evento) {
             <p class="comment-content">${comentarioSalvo.content}</p>
         `;
         
-        // 4. Usa .prepend() para adicionar o novo comentário NO TOPO da lista
         listaDeComentarios.prepend(elementoComentario);
 
-        // 5. Limpa o campo de texto
         campoComentario.value = '';
 
-        // atualiza o feed
         renderizarPostsNaGrade();
 
     } catch (erro) {
