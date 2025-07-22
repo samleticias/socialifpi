@@ -6,12 +6,12 @@ const devs = {
     },
     front2: {
       nome: "Kaio Gabriel",
-      imagem: "caminho/kaio.jpg",
-      descricao: "Descrição do kaio"
+      imagem: "../images/devs/kaio.png",
+      descricao: "Tenho grande interesse em programação, desenvolvimento de jogos e tecnologias web. Estou sempre em busca de aprender e crescer, expandindo continuamente meu conhecimento passo a passo no mundo da tecnologia."
     },
     back1: {
       nome: "João Victor",
-      imagem: "../images/devs/jota.jpg",
+      imagem: "../images/devs/jota.jpeg",
       descricao: "Desenvolvedor com fortes habilidades em desenvolvimento web, tanto no front-end quanto no back-end. Atualmente, também atua na área de sistemas embarcados, unindo experiência em aplicações web modernas com soluções inovadoras em hardware."
     },
     back2: {
