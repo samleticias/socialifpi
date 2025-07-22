@@ -40,3 +40,4 @@ Este projeto foi desenvolvido por:
 - **[Sâmmya Leticia](https://github.com/samleticias)**
 
 Link para o vídeo no Youtube: https://youtu.be/zlBnx5_w9rY 
+Link para o vídeo no Youtube: https://youtu.be/zVQma_0W7GM?si=ufVDyZ495QW055uP
