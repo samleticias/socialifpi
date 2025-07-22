@@ -38,3 +38,5 @@ Este projeto foi desenvolvido por:
 - **[Kaio Gabriel](https://github.com/KaioGabriel-the)**  
 - **[João Victor](https://github.com/victordev018)**  
 - **[Sâmmya Leticia](https://github.com/samleticias)**
+
+Link para o vídeo no Youtube: https://youtu.be/zlBnx5_w9rY 
